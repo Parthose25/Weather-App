@@ -20,13 +20,22 @@ app.post("/",function(req,res){
         https.get(url,function(response){
 
         response.on("data",function(data){
-            const weatherData =  JSON.parse(data);
-            const temp = weatherData.main.temp;
-            const desc = weatherData.weather[0].description;
-            const icon = weatherData.weather[0].icon;
-            const img = "https://openweathermap.org/img/wn/" + icon +"@2x.png";
-            res.render("weather",{desc:desc,temp:temp,img:img,query:query});
-           
+             const weatherData =  JSON.parse(data);
+             if(weatherData.cod==="404"){
+                const message=weatherData.message;
+                const temp = "";
+                 const desc = "";
+                 const img = "";
+                 const query="";
+                res.render("weather",{message,desc,temp,img,query});
+            }else{
+                const message="";
+                const temp = `${weatherData.main.temp} &deg; C`;
+                 const desc = weatherData.weather[0].description;
+                const icon = weatherData.weather[0].icon;
+                 const img = "https://openweathermap.org/img/wn/" + icon +"@2x.png";
+         res.render("weather",{desc,temp,img,query,message});
+            }    
         });
         }); 
 });
